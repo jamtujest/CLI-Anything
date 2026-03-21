@@ -701,7 +701,7 @@ This same SOP applies to any GUI application:
 | Shotcut/Kdenlive | `melt` or `ffmpeg` | .mlt (XML) | `apt install melt ffmpeg` | Build MLT XML → melt/ffmpeg renders video |
 | Audacity | `sox` | .aup3 | `apt install sox` | Generate sox commands → sox processes audio |
 | OBS Studio | `obs-websocket` | scene.json | `apt install obs-studio` | WebSocket API → OBS captures/records |
-| Browser (DOMShell) | `npx @apireno/domshell` (MCP) | Accessibility Tree (virtual FS) | `npx install -g npx` + Chrome ext | MCP SDK → DOMShell tools → filesystem navigation |
+| Browser (DOMShell) | `npx @apireno/domshell` (MCP) | Accessibility Tree (virtual FS) | `npm install -g npx` (if needed) + Chrome ext | MCP SDK → DOMShell tools → filesystem navigation |
 
 **The software is a required dependency, not optional.** The CLI generates valid
 intermediate files (ODF, MLT XML, bpy scripts, SVG) and hands them to the real
