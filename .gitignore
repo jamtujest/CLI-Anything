@@ -126,6 +126,7 @@ assets/gen_typing_gif.py
 !/docs/
 /docs/*
 !/docs/hub/
+/docs/hub/registry-dates.json
 !/notebooklm/
 /notebooklm/*
 /notebooklm/.*
