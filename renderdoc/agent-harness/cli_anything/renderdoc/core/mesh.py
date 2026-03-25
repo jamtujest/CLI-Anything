@@ -153,17 +153,21 @@ def _flatten(actions, out=None):
 def _get_indices(controller, ib, action):
     """Decode index buffer."""
     if action.flags & rd.ActionFlags.Indexed and ib.resourceId != rd.ResourceId.Null():
+        if action.numIndices <= 0:
+            return []
+
         idx_fmt = "B"
         if ib.byteStride == 2:
             idx_fmt = "H"
         elif ib.byteStride == 4:
             idx_fmt = "I"
 
-        ibdata = controller.GetBufferData(ib.resourceId, ib.byteOffset, 0)
-        offset = action.indexOffset * ib.byteStride
+        start = ib.byteOffset + action.indexOffset * ib.byteStride
+        length = action.numIndices * ib.byteStride
+        ibdata = controller.GetBufferData(ib.resourceId, start, length)
         fmt_str = str(action.numIndices) + idx_fmt
         try:
-            indices = _struct.unpack_from(fmt_str, bytes(ibdata), offset)
+            indices = _struct.unpack(fmt_str, bytes(ibdata))
             return [i + action.baseVertex for i in indices]
         except Exception as e:
             click.echo(f"Warning: failed to unpack indices: {e}", err=True)

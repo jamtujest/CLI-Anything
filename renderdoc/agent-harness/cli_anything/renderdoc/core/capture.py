@@ -36,6 +36,22 @@ def _require_rd():
         )
 
 
+def _api_properties_summary(props: Any) -> Dict[str, Any]:
+    """JSON-friendly subset of CaptureFile.APIProperties / GetAPIProperties."""
+    out: Dict[str, Any] = {"api": str(props.pipelineType)}
+    if hasattr(props, "degraded"):
+        out["degraded"] = bool(props.degraded)
+    driver = None
+    for attr in ("localRenderer", "vendor"):
+        if hasattr(props, attr):
+            val = getattr(props, attr)
+            if val is not None and str(val):
+                driver = str(val)
+                break
+    out["driver"] = driver if driver is not None else str(props.pipelineType)
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Global RenderDoc replay API (InitialiseReplay / ShutdownReplay) — refcounted
 # ---------------------------------------------------------------------------
@@ -108,14 +124,11 @@ class CaptureHandle:
         result: Dict[str, Any] = {"path": self.path}
         try:
             props = self._cap.APIProperties()
-            result["api"] = str(props.pipelineType)
-            result["driver"] = str(getattr(props, "degraded", props.pipelineType))
+            result.update(_api_properties_summary(props))
         except AttributeError:
-            # Fallback: get API info from replay controller
             self._ensure_replay()
             api_props = self._controller.GetAPIProperties()
-            result["api"] = str(api_props.pipelineType)
-            result["driver"] = str(api_props.pipelineType)
+            result.update(_api_properties_summary(api_props))
         try:
             result["replay_supported"] = self._cap.LocalReplaySupport()
         except AttributeError:

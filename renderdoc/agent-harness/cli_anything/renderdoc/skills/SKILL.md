@@ -7,6 +7,7 @@ install: pip install cli-anything-renderdoc
 requires:
   - renderdoc (Python bindings from RenderDoc installation)
   - click>=8.0
+  - prompt-toolkit>=3.0
 categories:
   - graphics
   - debugging

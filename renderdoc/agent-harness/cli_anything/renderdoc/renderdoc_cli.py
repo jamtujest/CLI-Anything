@@ -125,7 +125,10 @@ def cli(ctx, capture, json_mode, debug):
     Run without a subcommand to enter interactive REPL mode.
     """
     ctx.ensure_object(dict)
-    ctx.obj["capture_path"] = capture
+    # Preserve REPL session state: nested `cli.main(...)` omits global options, so
+    # only overwrite capture when the user passed `-c` on that invocation.
+    if capture is not None:
+        ctx.obj["capture_path"] = capture
     ctx.obj["json_mode"] = json_mode
     ctx.obj["debug"] = debug
 
@@ -876,7 +879,7 @@ def repl(ctx):
 
                 args = line.split()
                 try:
-                    cli.main(args, standalone_mode=False)
+                    cli.main(args, standalone_mode=False, obj=ctx.obj)
                 except SystemExit:
                     pass
                 except click.exceptions.UsageError as e:

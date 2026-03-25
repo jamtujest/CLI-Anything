@@ -31,6 +31,8 @@ setup(
     package_data={
         "cli_anything.renderdoc": ["skills/*.md", "README.md"],
     },
+    include_package_data=True,
+    zip_safe=False,
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

@@ -53,8 +53,14 @@ def fetch_counters(
             else:
                 return {"error": "No counters available"}
 
-    # Convert int IDs to rd.GPUCounter
-    rd_counters = [rd.GPUCounter(c) for c in counter_ids]
+    valid_ids = [int(c) for c in available]
+    try:
+        rd_counters = [rd.GPUCounter(c) for c in counter_ids]
+    except (ValueError, TypeError) as exc:
+        return {
+            "error": "Invalid counter id(s) %s: %s" % (counter_ids, exc),
+            "valid_counter_ids": valid_ids,
+        }
 
     results = controller.FetchCounters(rd_counters)
 

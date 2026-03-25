@@ -72,8 +72,9 @@ agent-harness/
   No dependency on `renderdoc` module. Uses synthetic data.
 - **E2E tests** (`test_full_e2e.py`): Require a real RenderDoc installation and
   at least one `.rdc` capture file. Test full CLI invocation via subprocess.
-- **Subprocess tests**: Use `_resolve_cli("cli-anything-renderdoc")` to find the
-  installed CLI binary.
+- **Subprocess tests**: Invoke the CLI with
+  `python -m cli_anything.renderdoc.renderdoc_cli` from `agent-harness/` (see
+  `test_core.py` / `test_full_e2e.py`).
 
 ## Dependencies
 
